@@ -1,2 +1,8 @@
-﻿// See https://aka.ms/new-console-template for more information
-Console.WriteLine("Hello, World!");
+﻿using File_Processor.Extensions;
+
+string secret = "abcciaa";
+
+Console.WriteLine($"Secret: {secret}");
+Console.WriteLine($"Encrypted: {secret.EncryptSecret()}");
+Console.WriteLine($"Longest Substring: {secret.FindLongestSubstring()}");
+Console.WriteLine($"Duplicates: {secret.CountDuplicates()}");
