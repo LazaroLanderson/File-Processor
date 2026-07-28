@@ -4,6 +4,7 @@ using File_Processor.Services;
 // Caminho para os arquivos de teste
 string import1Path = Path.Combine("Files", "example_import1.csv");
 string import2Path = Path.Combine("Files", "example_import2.csv");
+string outputPath = Path.Combine("Files", "secret_xml.xml");
 
 
 // IMPORT 1
@@ -38,3 +39,7 @@ foreach (Secret s in secrets)
     Console.WriteLine($" Duplicates: {s.DuplicateCount}");
     Console.WriteLine($" Almost Palindrome: {s.AlmostPalindrome}");
 }
+
+
+Console.WriteLine($"Export to XML: ");
+XmlExporter.ExportToXml(secrets, secretNames, outputPath);
