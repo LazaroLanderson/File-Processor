@@ -18,7 +18,7 @@ namespace File_Processor.Services
 
             if (!File.Exists(filePath))
             {
-                Console.WriteLine($"Arquivo não encontrado: {filePath}");
+                Console.WriteLine($"File not found: {filePath}");
                 return secrets;
             }
 
@@ -53,6 +53,44 @@ namespace File_Processor.Services
 
             return secrets;
 
+        }
+
+
+        // Lê o arquivo CSV 1 e processa os nomes/tempos/m35 e gera a lista de SecretName
+        public static List<SecretName> ProcessImport1(string filePath)
+        {
+            List<SecretName> secretNames = new List<SecretName>();
+
+            if (!File.Exists(filePath))
+            {
+                Console.WriteLine($"File not found: {filePath}");
+                return secretNames;
+            }
+
+            string[] lines = File.ReadAllLines(filePath);
+
+            // Pula o cabeçalho (secret, name, m35, time)
+            foreach (string line in lines.Skip(1))
+            {
+                if (string.IsNullOrWhiteSpace(line)) continue;
+
+                string[] parts = line.Split(",");
+                string secret = parts[0];
+                string rawName = parts[1];
+                int m35Value = int.Parse(parts[2]);
+                int timeSeconds = int.Parse(parts[3]);
+
+                SecretName secretNameObj = new SecretName
+                {
+                    Secret = secret,
+                    Name = rawName.ToCamelCase(),
+                    CalculatedM35 = m35Value.CalculateM35(),
+                    Time = timeSeconds.ToReadableTime()
+                };
+                secretNames.Add(secretNameObj);
+            }
+
+            return secretNames;
         }
 
 
