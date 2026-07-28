@@ -122,5 +122,31 @@ namespace File_Processor.Extensions
             return longestLenght;
         }
 
+
+        public static bool IsAlmostPalindrome(this string text)
+        {
+            int differentPairs = 0;
+            int leftPosition = 0;
+            int rightPosition = text.Length - 1;
+
+            while (leftPosition < rightPosition)
+            {
+                if (text[leftPosition] != text[rightPosition])
+                {
+                    differentPairs++;
+                }
+                
+                if (differentPairs > 1)
+                {
+                    return false;
+                }
+
+                leftPosition++;
+                rightPosition--;
+            }
+
+            return true;
+        }
+
     }
 }
