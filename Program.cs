@@ -43,3 +43,16 @@ foreach (Secret s in secrets)
 
 Console.WriteLine($"Export to XML: ");
 XmlExporter.ExportToXml(secrets, secretNames, outputPath);
+
+
+// Archive the files before the loading
+
+if (FileProcessor.TryMoveToProcessed(import1Path, out string newPath1))
+{
+    Console.WriteLine($"File 1 moved to: {newPath1}");
+}
+
+if (FileProcessor.TryMoveToProcessed(import2Path, out string newPath2))
+{
+    Console.WriteLine($"File 2 moved to: {newPath2}");
+}

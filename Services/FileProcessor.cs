@@ -93,6 +93,38 @@ namespace File_Processor.Services
             return secretNames;
         }
 
+        public static bool TryMoveToProcessed(string originalPath, out string destinationPath)
+        {
+            try
+            {
+                string directory = Path.GetDirectoryName(originalPath) ?? "Files";
+                string processedFolder = Path.Combine(directory, "processed");
+
+                if (!Directory.Exists(processedFolder))
+                {
+                    Directory.CreateDirectory(processedFolder);
+                }
+
+                destinationPath = Path.Combine(processedFolder, Path.GetFileName(originalPath));
+
+                if (File.Exists(destinationPath))
+                {
+                    File.Delete(destinationPath);
+                }
+
+                File.Move(originalPath, destinationPath);
+                return true;
+
+            }
+
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error to move the file: {ex.Message}");
+                destinationPath = string.Empty;
+                return false;
+            }
+        }
+
 
     }
 }

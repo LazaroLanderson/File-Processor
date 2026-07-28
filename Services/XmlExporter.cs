@@ -11,6 +11,9 @@ namespace File_Processor.Services
     internal class XmlExporter
     {
 
+        // Controle para duplicação
+        private static readonly HashSet<string> ExportedSecretIds = new HashSet<string>();
+
         // Junta a lista de Secrets com a lista de SecrentNames e gera o arquivo XML formatado
 
         public static void ExportToXml(List<Secret> secrets, List<SecretName> secretNames, string outputPath)
@@ -20,6 +23,11 @@ namespace File_Processor.Services
 
             foreach (Secret secret in secrets)
             {
+                if (ExportedSecretIds.Contains(secret.Value))
+                {
+                    continue; // Pula o secret se já tiver sido exportado antes
+                }
+
                 // Buscamos usando LINQ todos os nomes que pertencem a este secret
                 var matchingNames = secretNames.Where(sn => sn.Secret == secret.Value);
 
@@ -45,6 +53,7 @@ namespace File_Processor.Services
 
 
                 root.Add(secretElement);
+                ExportedSecretIds.Add(secret.Value);
             }
 
             // Criando o arquivo e salvando
