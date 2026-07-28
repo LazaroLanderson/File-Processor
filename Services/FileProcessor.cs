@@ -1,0 +1,60 @@
+﻿using File_Processor.Extensions;
+using File_Processor.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace File_Processor.Services
+{
+    public static class FileProcessor
+    {
+        // Lê o arquivo CSV processa os segredos e gera a lista de secrets
+
+        public static List<Secret> ProcessImport2(string filePath)
+        {
+            List<Secret> secrets = new List<Secret>();
+
+            if (!File.Exists(filePath))
+            {
+                Console.WriteLine($"Arquivo não encontrado: {filePath}");
+                return secrets;
+            }
+
+            string[] lines = File.ReadAllLines(filePath);
+
+            // Pula a primeira linha
+
+            foreach (string line in lines.Skip(1))
+            {
+                if (string.IsNullOrWhiteSpace(line)) continue;
+
+                string[] parts = line.Split(',');
+                string secret1 = parts[0];
+                string secret2 = parts[1];
+
+                // Decodifica o secret misturado usando o método do kata BuildSecret
+                string secretValue = secret1.BuildSecret(secret2);
+
+                // Cria o objeto Secret com todas as propriedades calculadas
+                Secret secretObj = new Secret
+                {
+                    Value = secretValue,
+                    Encrypted = secretValue.EncryptSecret(),
+                    LongestSubstring = secretValue.FindLongestSubstring(),
+                    DuplicateCount = secretValue.CountDuplicates(),
+                    AlmostPalindrome = secretValue.IsAlmostPalindrome()
+                };
+
+                secrets.Add(secretObj);
+
+            }
+
+            return secrets;
+
+        }
+
+
+    }
+}
