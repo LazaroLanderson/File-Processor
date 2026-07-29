@@ -1,6 +1,12 @@
 ﻿using File_Processor.Models;
 using File_Processor.Services;
 
+// Exemplo de chamada assíncrona da REST API
+string targetApiUrl = "https://raw.githubusercontent.com/LazaroLanderson/vai-chover-test/main/README.md";
+string downloadedFilePath = Path.Combine("Files", "api_download_test.txt");
+
+await RestApiService.DownloadFileFromApiAsync(targetApiUrl, downloadedFilePath);
+
 // Caminho para os arquivos de teste
 string import1Path = Path.Combine("Files", "example_import1.csv");
 string import2Path = Path.Combine("Files", "example_import2.csv");
